@@ -1,8 +1,8 @@
 #!/bin/sh
 
 echo "Updating system"
-apt-get -y update >/dev/null 2>&1
-apt-get -y full-upgrade >/dev/null 2>&1
+apt-get -y update
+#apt-get -y full-upgrade >/dev/null 2>&1
 apt-get -y install apt-transport-https ca-certificates host gnupg lsb-release >/dev/null 2>&1
 echo "System updated successfully"
 
