@@ -34,7 +34,7 @@ if ! dpkg -l | grep -q '^ii.*lynis'; then
 fi
 
 echo "Installing required packages"
-apt-get -y install rkhunter libpam-google-authenticator ufw fail2ban auditd audispd-plugins rsyslog chkrootkit libpam-pwquality net-tools curl unattended-upgrades apt-l>
+apt-get -y install rkhunter libpam-google-authenticator ufw fail2ban auditd audispd-plugins rsyslog chkrootkit libpam-pwquality net-tools curl unattended-upgrades apt-l
 echo "Packages installed successfully"
 
 
