@@ -1,0 +1,19 @@
+Solve Forensic Questions first
+Check Readme and create notes for the instructions
+Secure Users as mentioned in Readme
+
+Execute commands to get the scripts from our repo & execute
+------------------------------------------------------------
+sudo apt-get update
+sudo apt-get install git-all
+git clone https://github.com/guptaanisha/SecureDebian.git
+cd SecureDebian/Debian
+ls -l *.sh
+chmod 755 *.sh
+sudo ./deb_installPackages.sh
+sudo ./secure_deb_system.sh
+sudo ./secure_ssh.sh
+sudo ./secure_firewall.sh
+
+--------------------------------------------------------------
+Follow the checklist
