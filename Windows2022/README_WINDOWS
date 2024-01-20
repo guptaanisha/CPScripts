@@ -490,7 +490,12 @@ Set-ADAccountPassword -Identity $username -NewPassword $newPassword -Reset
 Set-AdUser -Identity $username -ChangePasswordAtLogon $true
 
 
-Take ownership of file or other
-objects
 
-Administrators Administrators
+
+# Specify the username (local user) and the new password
+$username = "localUsername"
+$newPassword = ConvertTo-SecureString -String "newLocalPassword123" -AsPlainText -Force
+
+# Set the new password for the local user
+Set-LocalUser -Name $username -Password $newPassword
+
