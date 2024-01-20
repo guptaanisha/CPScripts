@@ -472,6 +472,24 @@ Users
 
 Administrators, Users
 
+
+
+
+CHANGE AD DOMAIN USER PASSWORD
+# Import the Active Directory module (if not already loaded)
+Import-Module ActiveDirectory
+
+# Specify the username (sAMAccountName) and the new password
+$username = "username"
+$newPassword = ConvertTo-SecureString -String "newPassword123" -AsPlainText -Force
+
+# Set the new password for the user
+Set-ADAccountPassword -Identity $username -NewPassword $newPassword -Reset
+
+# Force the user to change their password at next logon (optional)
+Set-AdUser -Identity $username -ChangePasswordAtLogon $true
+
+
 Take ownership of file or other
 objects
 
