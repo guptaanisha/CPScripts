@@ -1,6 +1,6 @@
 #!/bin/sh
 
-msg_info "Hardening Firewall"
+echo "Hardening Firewall"
 
 ufw logging full >/dev/null 2>&1
 ufw default deny incoming >/dev/null 2>&1
