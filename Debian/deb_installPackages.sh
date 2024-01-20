@@ -3,6 +3,7 @@
 echo "Updating system"
 apt-get -y update
 sudo apt upgrade chromium
+sudo apt upgrade libreoffice
 
 apt-get -y install apt-transport-https ca-certificates host gnupg lsb-release >/dev/null 2>&1
 echo "System updated successfully"
