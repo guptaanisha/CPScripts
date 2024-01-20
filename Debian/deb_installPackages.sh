@@ -2,7 +2,8 @@
 
 echo "Updating system"
 apt-get -y update
-#apt-get -y full-upgrade >/dev/null 2>&1
+sudo apt upgrade chromium
+
 apt-get -y install apt-transport-https ca-certificates host gnupg lsb-release >/dev/null 2>&1
 echo "System updated successfully"
 
