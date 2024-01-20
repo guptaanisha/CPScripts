@@ -1,0 +1,478 @@
+WINDOWS SERVER 2022 CHECKLIST
+
+ ANSWER FORENSIC QUESTIONS FIRST!
+ Open your Internet browser (Chrome, Edge Firefox (if installed))
+o Ensure Adobe Flash/Reader and Java Plugins are up-to-date.
+o Also remove any toolbars that are not supposed to be there.
+
+User Accounts
+Control Panel &gt; User Accounts and Family Safety &gt; User Accounts
+
+OR
+
+Control Panel &gt; System and Security &gt; Administrative Tools &gt; Computer Management ●
+Create/Change password for all accounts
+● Validate that passwords for each account are secure/meet the requirements
+● Make sure all user accounts are in their respective groups/permissions
+● Disable all user accounts not authorized
+● Disable guest account unless stated in readme file [This is part of PS Script]
+● Make sure that file permissions are correct for the users
+○ Go to a file and right click &gt; Properties &gt; Security &gt; Edit
+
+■ Specific permissions override group permissions, such as giving all
+standard users read only but then specifically one user can edit
+
+• Download Important Service Packs and Windows Updates.
+o Control Panel ‐&gt; Windows Update ‐&gt; Install Updates
+o Iconize Windows Update Window
+o DO NOT RESTART UNTIL LATER!!! (Takes a while to update system)
+● Password Policy
+o Enforce password history: 24
+o Maximum password age: 60
+o Minimum password age: 1
+o Minimum password length: 10
+o Password must meet complexity requirements: Enabled
+o Store password using reversible encryption: Disabled
+● Lockout Policy
+o Account lockout duration: 30 Minutes
+o Account lockout threshold: 10
+o Reset account lockout counter after: 30
+
+● Check ALL the groups
+o ‘Guests’ group should ONLY have ‘Guest’ in it
+o If the README wants only certain users to use RDP then add ONLY those users to
+the ‘Remote Desktop Users’ group
+Control Panel ‐&gt; Programs and Features
+• Account Management
+o Control Panel ‐&gt; User Accounts ‐&gt; Manage another account
+o Delete or Turn off Guest Account
+o Delete Unauthorized Accounts
+③ Write down deleted Account Names
+o Make sure all accounts are User accounts except those that are authorized as
+Administrators o Ensure that all accounts are password protected.
+Background Tasks
+Control Panel &gt; System and Security &gt; Windows Update
+● Download updates in background
+● Will update the service pack, but might have to update more than once to get the points
+(don’t update more than three times)
+Control Panel &gt; System and Security &gt; Action Center
+● Update security protocols
+● Backup if necessary
+● Antivirus, antimalware
+○ Ex. Avast
+○ Note: this slowed down the VM a lot, so do near the end
+
+Quick and Easy Tasks
+Control Panel &gt; System and Security &gt; Windows Update
+● Enable Automatic Updates (recommended settings)
+Control Panel &gt; System and Security &gt; Windows Firewall
+● Turn on Windows Firewall / use recommended settings
+● Check inbound/outbound rules
+● Disable startup services/tasks
+o Control Panel ‐&gt; System and Security ‐&gt; Windows Firewall‐&gt;Advanced settings
+o Allow trusted programs to connect without being blocked by adding them to your
+Windows Firewall Exceptions list
+For each network type, you can customize whether you want the programs allowed
+through  
+
+o It’s much safer to allow only certain programs through your firewall than to open an
+entire port to traffic
+● Ports are numbers that identifies one side of a connection between two
+computers
+o Common Exceptions
+● Core Networking
+• Regular Microsoft Windows services that retrieve data from the Internet
+• If you don’t enable this exception across all three types of networks,
+some Microsoft services and programs will not run properly
+● File and Printer Sharing ‐  off
+● Remote Assistance ‐ off
+● Remote Desktop  ‐ off [Review Readme if this is not a required service
+disable it]
+● UPnP Framework (Universal Plug‐and‐Play) ‐off
+
+o Advanced Settings
+● Inbound Rules
+● Outbound Rules
+● Connection Security Rules
+● Monitoring
+• Secure Internet Connections
+o Control Panel ‐&gt; Internet Options  
+o Security Tab
+
+● Security Level – High
+
+o Privacy Tab
+
+● Block All Cookies
+● Never allow websites to request your physical location
+● Turn on Pop‐up Blocker
+● Disable toolbars and extensions when InPrivate Browsing starts
+
+• Services
+o Control Panel ‐&gt; Administrative Tools ‐&gt; Services
+o Disable unnecessary services (Stop and Disable)
+● IIS [Check if needed in Readme]
+● NetMeeting Remote Desktop Sharing – VoIP
+● Remote Desktop Help Session Manager
+● Remote Registry
+
+● Routing and Remote Access
+● Simple File Sharing
+● SSD Discovery Service
+● Telnet
+● FTP
+● Universal Plug and Play Device Host
+● Windows Messenger Service
+
+Remove Malicious/Unwanted Software Control Panel &gt; Programs &gt; Programs &amp; Features
+● Check all programs and remove any that may seem fishy
+● Remove programs that are not listed on the Readme file, other than
+○ Files to keep(for sure):
+
+● CyberPatriot Scoring Engine
+● Microsoft .Net Framework
+● Microsoft Visual C++
+● Vmware tool
+
+Note: not all programs will be listed here, also check C:\ProgramFiles\ and C:\ProgramFiles(x86)
+● CHECK APPDATA as well for hidden malware/files
+Miscellaneous Items
+● Update browser: Firefox
+○ Go online and install the update, google how to if you do not know ● Search User
+Directories for “non-work related” media files ● Check if there are any folders/files being shared
+on the network ● Update any programs that should be on the OS
+● Check Event Viewer and Task Scheduler in Administrative Tools ● Check Task Manager
+○ Can start from Ctrl+Alt+Delete
+○ Services tab
+■ If it doesn’t have a description, that is a red flag
+● View performance data for system, both real time and logs
+• Event Log Performance
+o Control Panel ‐&gt; Performance Information and Tools ‐&gt; Advanced Tools ‐&gt; View
+performance details in Event Log
+
+• Resource Monitor
+o Control Panel ‐&gt; Performance Information and Tools ‐&gt; Advanced Tools ‐&gt;
+Open Resource Monitor
+
+● Use SmartScreen online services(Security and Maintenance)=ON
+● Wi-Fi Sense (Network &amp; Internet)
+o Automatically connect to suggested open hotspots=OFF
+o Automatically connect to hotspots temporarily to see if paid network services are
+available=OFF
+
+● Turn UAC to max(Change User Account Control Settings)
+● Change Adapter settings(Disabling IPv6 and other services)=Uncheck these
+o Client for MS Networks
+o File and Printer Sharing for Microsoft Networks
+o QoS
+o Microsoft Network Adapter Multiplexor Protocol
+o Microsoft LLDP Protocol Driver
+o Link Layer Topology Discovery Mapper IO Driver
+o Link Layer Topology Discovery Responder
+o Internet protocol version 6
+o &#39;Internet Protocol version 4 (TCP IPv4), click Properties, click Advanced,
+o &#39;DNS&#39; tab, uncheck mark &#39;register this connections address in DNS&#39;
+o &#39;WINS&#39; tab, select &#39;Disable NETBIOS over TCP/IP&#39;
+● Disable port 1900 UPnP
+
+o Regedit path: HKLM\Software\Microsoft\DirectplayNATHelp\DPNHUPnP
+o Right click on right pane, new dword:32 bit, named UPnPMode
+o Double click on that and set it to 2
+● Windows Services
+o UPnP Device Host: Stopped – Disabled
+o RDP: Depends on README
+o Telnet: Stopped – Disabled
+o SNMP Trap: Stopped – Disabled
+o Windows Event Collector: Running – Automatic
+o Remote Registry: Stopped - Disabled
+
+● Check windows features
+o Control Panel&gt;Programs&gt; Turn Windows features on or off
+o Things to never have on
+▪ Telnet client\server
+▪ SNMP
+▪ RIP Listener
+▪ Client for NFS
+▪ Internet Information Services (IIS)
+▪ World Wide Web Services
+o If FTP sever then turn on TFTP otherwise make sure that it is not checked
+o Disable SMB v1
+▪ Turn Windows features on or off=Uncheck SMB 1.0/CIFS File Sharing
+Support
+
+● Shares
+o Only 3 shares should be shared unless README says otherwise
+▪ ADMIN$
+▪ C$
+▪ IPC$
+
+● Firewall rules: [This is included in the PSScript fwrules.ps1]
+o Inbound=disable MS Edge
+o Inbound=disable Search
+o Inbound=disable MSN Money
+o Inbound=disable MSN Sports
+o Inbound=disable MSN News
+o Inbound=disable MSN Weather
+o Inbound=disable Microsoft Photos
+o Inbound=disable Xbox
+● Turning off Tiles:
+
+o Right click on the Tile and choose turn off
+● Turn off AutoPlay
+o Settings..Devices….AutoPlay=off
+● Run the command “netplwiz”
+● Disable OneDrive on Startup
+o Use Task Manager or mscofig.exe
+● Screen Saver
+o Settings…Personalize….Lock Screen...Screen Saver settings=wait 10 min and
+checkmark “On resume display Logon screen”
+
+● Auditing
+o Change all to Success/Failure
+● Windows defender
+o Turn on Windows defender
+▪ If disabled go into gpedit.msc and find the ‘windows defender’ option and
+change to enable
+
+THESE ARE FOR MOST SECURE SETTINGS MAKE SURE TO CHECK THESE AS A
+TEAM!!!!!(OPTIONAL)
+
+o Accounts: Administrator account status: disabled
+o Accounts: Block Microsoft accounts: Users can’t add or log on with Microsoft
+accounts
+o Accounts: Guest account status: disabled **
+o Accounts: Limit local account use of blank passwords to console logon only:
+enabled
+o Audit: Audit access of global system objects: disabled
+o Audit: Audit the use of Backup and Restore privilege: disabled
+
+o Audit: Force audit policy subcategory settings (Windows Vista of later) to override
+audit policy category settings: enabled
+o Audit: Shutdown system immediately if unable to log security audits: enable?
+o DCOM: Machine access restrictions: no remote access for all accounts
+o DCOM; Machine launch restrictions: no remote launch and remote activation for
+all accounts
+o Devices: Allow undock without having to log on: disabled
+o Devices: Allowed to format and eject removable media: administrators and
+interactive users
+o Devices: Prevent users from installing printer drivers: enabled
+o Domain member: Digitally encrypt or sign secure channel data (always): enabled
+o Domain member: Digitally encrypt secure channel data (when possible): enabled
+o Domain member: Digitally sign secure channel data (when possible); enabled
+o Domain member: Disable machine account password changes: disabled
+o Domain member: Maximum machine account password age: 30 days
+o Domain member: Require strong (Windows 2000 or later) session key: enabled
+o Domain member: Display user information when session is locked: do not display
+user information
+o Interactive logon: Do not display last user name: enabled
+o Interactive logon: Do not require CTRL+ALT+DEL: disabled
+o Interactive logon; Machine account lockout threshold: 10 invalid logon attempts
+o Interactive logon: Machine inactivity limit: 900 seconds
+o Interactive logon: Number of previous logons to cache (in case domain controller is
+not available: 4 logons
+o Interactive logon: Prompt user to change password before expiration: 14 days
+o Interactive logon; Require Domain Controller authentication to unlock
+workstation; Disabled
+o Interactive logon: Require smart card: disabled..
+o Interactive logon: Smart card removal behavior: Lock workstation
+
+o MS network client: Digitally sign communications (always): enabled
+o MS network client: Digitally sign communications (if server agrees): enabled
+o MS network client: Send unencrypted password to third-party SMB servers:
+disabled
+o MS network server; Amount of idle time required before syspending session: 15
+minutes
+o MS network server: Digitally sign communications (always): enabled
+o MS network server; Digitally sign communications (if client agrees); enabled
+o MS network server: Disconnect clients when logon hours expire: enabled
+o MS network server: Server SPN target name validation level: Accept if provided by
+client
+o Network access: Allow anonymous SID/Name translation: disabled
+o Network access: Do not allow anonymous enumeration of SAM accounts: enabled
+o Network access: Do not allow anonymous enumeration of SAM accounts and
+shares: enabled
+o Network access: Do not allow storage of passwords and credentials for network
+authentication: enabled
+o Network access: Let Everyone permissions apply to anonymous users: disabled
+o Network access: Named Pipes that can be accessed anonymously: blank
+o Network access: Remotely accessible registry paths: blank
+o Network access; Remotely accessible registry paths and sub-paths: blank
+o Network access: Restrict anonymous access to Named Pipes and Shares: enabled
+o Network access: Shares that can be accessed anonymously: blank
+o Network access: Sharing and security model for local accounts: Classic - local users
+authenticate as themselves
+o Network security: Allow Local System to use computer identity for NTLM: enabled
+o Network security: Allow LocalSystem NULL session fallback: disabled
+o Network security: Allow PKU2U authentication requests to this computer to use
+online identifies: disabled
+
+o Network security: Configure encryption types allowed for Kerberos:
+RC4_HMAC_MD5, AES128_HMAC_SHA1, AES256_HMAC_SHA1, Future encryption
+types
+o Network security: Do not store LAN Manager hash value on next password change:
+enabled
+o Network security: Force logoff when logon hours expire: enabled
+o Network security; LAN Manager authentication level: Send NTLMv2 response only,
+Refuse LM &amp; NTLM
+o Network security: LDAP client signing requirements: Negotiate signing
+o Network security: Minimum session security for NTLM SSP based (including secure
+RPC) clients: Require NTLMv2 session security, Require 128 bit encryption
+o Network security: Minimum session security for NTLM SSP based (including secure
+RPC) server: Require NTLMv2 session security, Require 128 bit encryption
+o Network security: Restrict NTLM: Incoming NTLM traffic: Deny all accounts
+o Network security: Restrict NTLM: NTLM authentication in this domain: Deny all
+o Network security: Restrict NTLM: Outgoing NTLM traffic to remote servers: Deny
+all
+o Recovery console: Allow automatic administrative logon: disabled
+o Recovery console: Allow floppy copy and access to all drives and all folders:
+disabled
+o Shutdown: Allow system to be shut down without having to logon: disabled
+o Shutdown: Clear virtual memory page-file: disabled
+o System cryptography: Use FIPS compliant algorithms for encryption, hashing and
+signing: disabled
+o System objects: Require case insensitivity for non-Windows subsystems: enabled
+o System objects: Strengthen default permissions of internal system objects (e.g.
+Symbolic links) : enabled
+o System settings: Optional subsystems: blank
+o System settings: Use Certificate Rules on Windows Executables for Software
+Restriction Policies: disabled
+o UAC: Admin Approval Mode for Built-in Administrator account: enabled
+
+o UAC: Allow UIAccess applications to prompt for elevation without using the secure
+desktop: disabled
+o UAC: Behavior of elevation prompt for administrators in Admin Approval Mode:
+Prompt for consent on the secure desktop
+o UAC: Behavior of the elevation prompt for standard users: Automatically deny
+elevation requests
+o UAC: Detect application installations and prompt for elevation: enabled
+o UAC: Only elevate executables that are signed and validated: disabled
+o UAC; Only elevate UIAccess applications that are installed in secure locations:
+enabled
+o UAC: Run all administrators in Admin Approval Mode: enabled
+o UAC: Switch to the secure desktop when prompting for elevation: enabled
+o UAC: Virtualize file and registry write failures to per-user locations: enabled
+
+● User Rights Assignment(OPTIONAL)
+Policy Default Secure Setting
+Access Credential Manger as a
+trusted caller
+
+No one No one
+
+Access the computer from the
+network
+
+Everyone, Administrators, Users,
+Backup Operators
+
+Administrators
+
+Act as park of the operating system No one No one
+Adjust memory quotas for a process Administrators, LOCAL SERVICE,
+
+NETWORK SERVICE
+
+Administrators, LOCAL SERVICE,
+NETWORK SERVICE
+
+Allow log on locally Guest, Administrators, Users,
+
+Backup Operators
+
+Administrators, Users
+
+Allow log on through Remote
+Desktop Services
+
+Administrators, Remote Desktop
+Users
+
+Administrators, Remote Desktop
+Users
+Back up files and directories Administrators, Backup Operators Administrators
+Change system time Administrators, LOCAL SERVICE Administrators, LOCAL SERVICE
+Change the time zone Administrators, LOCAL SERVICE, Administrators, LOCAL SERVICE,
+
+Users Users
+Create a pagefile Administrators Administrators
+Create a token object No one No one
+Create global objects Administrators, LOCAL SERIVCE,
+NETWORK SERVICE, SERVICE
+
+Administrators, LOCAL SERIVCE,
+NETWORK SERVICE, SERVICE
+
+Create permanent shared objects No one No one
+Create symbolic links Administrators Administrators
+Debug programs Administrators Administrators
+Deny access to this computer from
+the network
+
+Guest Guest, Local account
+
+Deny log on as a batch job No one Guest
+Deny log on as a service No one Guest
+Deny log on locally Guest Guest
+Deny log on through Remote
+Desktop Services
+
+No one Guest, Local account
+
+Enable computer and user accounts
+to be trusted for delegation
+
+No one No one
+
+Force shutdown from a remote
+system
+
+Administrators Administrators
+
+Generate security audits LOCAL SERVICE, NETWORK SERVICE LOCAL SERVICE, NETWORK SERVICE
+Impersonate a client after
+authentication
+
+Administrators, LOCAL SERIVE,
+NETWORK SERVICE, SERVICE
+
+Administrators, LOCAL SERIVE,
+NETWORK SERVICE, SERVICE
+
+Increase scheduling priority Administrators Administrators
+Load and unload device drivers Administrators Administrators
+Lock pages in memory No one No one
+Log on as a batch job Administrators, Backup Operators,
+
+Performance Log Users
+
+Administrators
+
+Log on as a service NT SERVICE\ALL SERVICES No one
+Manage auditing and security log Administrators Administrators
+
+Modify an object label No one No one
+Modify firmware environment
+values
+
+Administrators Administrators
+
+Perform volume maintenance tasks Administrators Administrators
+Profile single process Administrators Administrators
+Profile system performance Administrators, NT
+SERVICE\WdiServiceHost
+
+Administrators, NT
+SERVICE\WdiServiceHost
+
+Replace a process level token LOCAL SERVICE, NETWORK SERVICE LOCAL SERVICE, NETWORK SERVICE
+Restore files and directories Administrators, Backup Operators Administrators
+Shutdown the system Administrators, Backup Operators,
+
+Users
+
+Administrators, Users
+
+Take ownership of file or other
+objects
+
+Administrators Administrators
