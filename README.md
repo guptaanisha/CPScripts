@@ -1,4 +1,4 @@
-# Secure Debian and Windows for CyberPatriot competition.
+#  CyberPatriot Scripts for securing Secure Debian and Windows
 
 This script is written and maintained by Cyber Patriot Teams 17-1385 & 17-1386 (CAP TX-295 Teams). **This script is for CyberPatriot 17-1385 & 17-1386 (CAP TX-295 Teams) only;** Use is **BANNED** for any other team. (US Cyber Patriot Rule 4010.1.d)
 
