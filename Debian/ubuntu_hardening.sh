@@ -116,7 +116,7 @@ system_update
 install_packages
 configure_auto_updates
 harden_password_policy
-set_account_lockout
+#set_account_lockout
 configure_firewall
 secure_ssh
 enable_fail2ban
