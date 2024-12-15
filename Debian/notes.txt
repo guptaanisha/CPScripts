@@ -1,0 +1,130 @@
+1. Account Policies
+Password Policy
+Install the libpam-pwquality package:
+  sudo apt update
+  sudo apt install libpam-pwquality -y
+Configure password strength in /etc/security/pwquality.conf:
+  sudo nano /etc/security/pwquality.conf
+Example settings:
+  minlen = 12
+  minclass = 3
+  maxrepeat = 3
+  dcredit = -1
+  ucredit = -1
+  ocredit = -1
+  lcredit = -1
+Apply settings: Edit /etc/pam.d/common-password:
+  password requisite pam_pwquality.so retry=3
+Lockout Policy
+Configure account lockout after failed login attempts: Add the following to /etc/pam.d/common-auth:
+  auth required pam_tally2.so deny=5 unlock_time=900
+
+2. Application Security Settings
+Critical Service Settings
+Disable unnecessary services:
+  sudo systemctl disable <service-name>
+Example:
+  sudo systemctl disable cups
+Required Application Settings
+Configure secure permissions for critical applications: Example for Nginx:
+  sudo chmod 750 /etc/nginx
+  sudo chown root:root /etc/nginx
+
+3. Application Updates
+Automatic Updates
+Install and configure unattended-upgrades:
+  sudo apt install unattended-upgrades -y
+  sudo dpkg-reconfigure --priority=low unattended-upgrades
+
+Customize /etc/apt/apt.conf.d/50unattended-upgrades for specific updates:
+  Unattended-Upgrade::Allowed-Origins {
+      "Ubuntu jammy-security";
+      "Ubuntu jammy-updates";
+  };
+4. Defensive Countermeasures
+Firewall
+Configure UFW:
+  sudo ufw default deny incoming
+  sudo ufw default allow outgoing
+  sudo ufw allow ssh
+  sudo ufw enable
+
+Anti-virus
+Install ClamAV:
+  sudo apt install clamav clamav-daemon -y
+  sudo systemctl enable clamav-daemon
+  sudo systemctl start clamav-daemon
+
+Encryption
+Enable disk encryption: During installation, select LVM with encryption or use cryptsetup for existing systems.
+
+5. Forensic Questions
+Log file analysis:
+View authentication logs:
+  sudo cat /var/log/auth.log
+
+List recent command history:
+  history | less
+
+6. Local Policies
+Audit Policy
+Install auditd:
+  sudo apt install auditd -y
+  sudo systemctl enable auditd
+  sudo systemctl start auditd
+
+Configure /etc/audit/audit.rules: Example:
+  -w /etc/passwd -p wa -k passwd_changes
+  -w /etc/ssh/sshd_config -p wa -k ssh_changes
+
+Security Options
+Restrict privilege elevation:
+  sudo chmod 750 /usr/bin/sudo
+
+7. Operating System Updates
+Manual Updates
+Update and upgrade packages:
+  sudo apt update && sudo apt upgrade -y
+
+
+8. Policy Violations
+Malware
+Scan for backdoors, keyloggers:
+  sudo clamscan -r /
+
+Prohibited Files
+Find specific file types:
+  sudo find / -type f -name "*.mp3"
+
+Unwanted Software
+Remove unwanted packages:
+  sudo apt remove <package-name>
+
+9. Service Auditing
+List all services:
+  sudo systemctl list-unit-files --type=service
+Enable or disable:
+  sudo systemctl disable <service-name>
+  sudo systemctl enable <service-name>
+
+10. Uncategorized OS Settings
+Remote Access
+Disable root SSH login: Edit /etc/ssh/sshd_config:
+  PermitRootLogin no
+
+Restart SSH:
+  sudo systemctl restart sshd
+
+File Sharing
+Secure Samba shares: Edit /etc/samba/smb.conf:
+  [shared]
+  path = /srv/samba/share
+  read only = no
+  browsable = yes
+
+11. User Auditing
+List all users:
+  cat /etc/passwd
+
+Check for unauthorized users:
+  sudo awk -F: '($3 < 1000) { print $1 }' /etc/passwd
