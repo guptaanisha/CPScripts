@@ -1,0 +1,355 @@
+**Comprehensive Guide for Resolving Vulnerabilities in Windows Server 2019**
+
+---
+
+### **1. Account Policy**
+
+#### **Issue: Weak password policies and account lockout settings**
+
+**Steps to Resolve:**
+
+1. Open **Group Policy Management** (`gpmc.msc`).
+2. Navigate to: `Computer Configuration > Policies > Windows Settings > Security Settings > Account Policies > Password Policy`.
+3. Update the following:
+   - **Minimum password length:** Set to at least 12 characters.
+   - **Password complexity:** Enable.
+   - **Enforce password history:** Set to 24.
+   - **Maximum password age:** Set to 60 days.
+4. Navigate to `Account Lockout Policy`:
+   - **Account lockout threshold:** Set to 5.
+   - **Account lockout duration:** Set to 15 minutes.
+   - **Reset account lockout counter after:** Set to 15 minutes.
+
+**PowerShell Script:**
+
+```powershell
+# Update Password Policy using Local Security Policy
+secedit /export /cfg C:\passwordpolicy.inf
+Add-Content -Path C:\passwordpolicy.inf -Value "[Password Policy]\nMinimumPasswordLength = 12\nPasswordComplexity = 1\nPasswordHistorySize = 24\nMaximumPasswordAge = 60"
+secedit /configure /db secedit.sdb /cfg C:\passwordpolicy.inf /quiet
+
+# Update Account Lockout Policy
+Add-Content -Path C:\passwordpolicy.inf -Value "[Account Lockout Policy]\nLockoutBadCount = 5\nLockoutDuration = 15\nResetLockoutCount = 15"
+secedit /configure /db secedit.sdb /cfg C:\passwordpolicy.inf /quiet
+```
+
+**Troubleshooting:**
+- Run `gpupdate /force` after changes.
+- Verify settings with `rsop.msc`.
+
+---
+
+### **2. Application Security**
+
+#### **Issue: Applications with unnecessary permissions**
+
+**Steps to Resolve:**
+
+1. Audit installed applications.
+2. Restrict permissions using **AppLocker**:
+   - Open `gpedit.msc` and navigate to `Computer Configuration > Policies > Windows Settings > Security Settings > Application Control Policies > AppLocker`.
+   - Create rules for:
+     - **Executable Rules**
+     - **Script Rules**
+     - **Packaged App Rules**
+3. Test rules before enforcement.
+
+**PowerShell Script:**
+
+```powershell
+# Enable AppLocker
+Set-Service -Name AppIDSvc -StartupType Automatic
+Start-Service -Name AppIDSvc
+
+# Configure Default Rules
+New-AppLockerPolicy -RuleType Default | Set-AppLockerPolicy -Merge
+```
+
+**Troubleshooting:**
+
+- Monitor enforcement logs under `Event Viewer > Application and Services Logs > Microsoft > Windows > AppLocker`.
+
+---
+
+### **3. Application Updates**
+
+#### **Issue: Outdated applications**
+
+**Steps to Resolve:**
+
+1. Use **Windows Server Update Services (WSUS)** to manage updates.
+2. Regularly update third-party software using a tool like Chocolatey.
+
+**PowerShell Script:**
+
+```powershell
+# Chocolatey Install and Update
+Set-ExecutionPolicy Bypass -Scope Process -Force;
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;
+iwr https://community.chocolatey.org/install.ps1 -UseBasicParsing | iex
+choco upgrade all -y
+```
+
+**Troubleshooting:**
+
+- Review WSUS logs for update issues.
+- Verify application versions manually.
+
+---
+
+### **4. Defensive Countermeasures**
+
+#### **Issue: Lack of firewall and antivirus configurations**
+
+**Steps to Resolve:**
+
+1. Configure **Windows Defender Firewall**:
+   - Use `wf.msc` to create inbound/outbound rules.
+2. Enable **Windows Defender Antivirus**:
+   - Run `Set-MpPreference` to configure.
+
+**PowerShell Script:**
+
+```powershell
+# Enable Windows Defender Firewall
+Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True
+
+# Configure Windows Defender Antivirus
+Set-MpPreference -DisableRealtimeMonitoring $false
+Start-MpScan -ScanType FullScan
+```
+
+**Troubleshooting:**
+
+- Check `Event Viewer > Windows Defender` for errors.
+
+---
+
+### **5. Forensics Questions**
+
+#### **Issue: Evidence collection**
+
+**Steps to Resolve:**
+
+1. Use `Get-EventLog` and `Get-WinEvent` to analyze logs.
+2. Collect memory dumps using `taskmgr.exe` or `procdump`.
+
+**PowerShell Script:**
+
+```powershell
+# Export Event Logs
+Get-EventLog -LogName System -Newest 1000 | Export-Csv C:\Forensics\SystemLog.csv
+Get-EventLog -LogName Security -Newest 1000 | Export-Csv C:\Forensics\SecurityLog.csv
+```
+
+---
+
+### **6. Local Policy**
+
+#### **Issue: Weak local policies**
+
+**Steps to Resolve:**
+
+1. Navigate to `gpedit.msc` and update:
+   - **Audit Policy**: Enable success and failure for logon events.
+   - **User Rights Assignment**: Remove unnecessary permissions.
+   - **Security Options**: Disable guest account.
+
+**PowerShell Script:**
+
+```powershell
+# Audit Policy
+AuditPol /set /subcategory:"Logon" /success:enable /failure:enable
+
+# Disable Guest Account
+net user guest /active:no
+```
+
+**Troubleshooting:**
+
+- Verify with `gpresult /h`.
+
+---
+
+### **7. Malware**
+
+#### **Issue: Active malware**
+
+**Steps to Resolve:**
+
+1. Run full scans using **Windows Defender**.
+2. Use **Malwarebytes** for advanced detection.
+
+**PowerShell Script:**
+
+```powershell
+# Windows Defender Scan
+Start-MpScan -ScanType FullScan
+```
+
+**Steps to Identify Malware:**
+
+1. Look for unusual system behavior such as high CPU usage, unexpected crashes, or unknown processes.
+2. Use tools like **Process Explorer** to identify suspicious processes.
+3. Scan the system using Windows Defender and Malwarebytes.
+4. Review startup programs using `Task Manager` or `msconfig`.
+5. Analyze logs in `Event Viewer` under `Windows Logs > Application` and `System` for anomalies.
+
+**Tools:**
+
+- **how to **
+
+**Troubleshooting:**
+
+- Use safe mode if malware prevents access.
+- Quarantine suspicious files immediately.
+
+---
+
+### **8. Operating System Updates**
+
+#### **Issue: Missing updates**
+
+**Steps to Resolve:**
+
+1. Use `sconfig` to configure updates.
+2. Run `wuauclt` to force updates.
+
+**PowerShell Script:**
+
+```powershell
+# Check for Updates
+Install-WindowsUpdate -AcceptAll -AutoReboot
+```
+
+---
+
+### **9. Prohibited Files**
+
+#### **Issue: Unauthorized files**
+
+**Steps to Resolve:**
+
+1. Use file scanning tools.
+2. Remove prohibited files manually.
+
+**PowerShell Script:**
+
+```powershell
+# Search and Remove Prohibited Files
+Get-ChildItem -Path C:\ -Include *.mp3,*.exe -Recurse | Remove-Item -Force
+```
+
+---
+
+### **10. Service Auditing**
+
+#### **Issue: Unnecessary services**
+
+**Steps to Resolve:**
+
+1. Identify services using `Get-Service`.
+2. Disable unused services.
+
+**Steps to Identify Unwanted Services:**
+
+1. Compare services against a baseline of required services for your environment.
+2. Use tools like **SCW** or **Sysinternals Autoruns**.
+3. Check for suspiciously named or undocumented services.
+
+**PowerShell Script:**
+
+```powershell
+# Disable Unnecessary Services
+Set-Service -Name Fax -StartupType Disabled
+Set-Service -Name Spooler -StartupType Disabled
+
+# List Running Services for Review
+Get-Service | Where-Object {$_.Status -eq 'Running'} | Out-GridView
+```
+
+**Troubleshooting:**
+
+- Verify the impact of disabling services in a test environment.
+- Re-enable services if critical functionality is affected.
+
+---
+
+### **11. Uncategorized OS Settings**
+
+#### **Issue: Misconfigured settings**
+
+**Steps to Resolve:**
+
+1. Use **Security Configuration Wizard (SCW)**.
+
+**Steps to Identify Backdoors:**
+
+1. Review local user accounts for unauthorized additions.
+2. Use `netstat -ano` to identify unusual listening ports.
+3. Scan the system for rogue scripts or tools in sensitive directories like `C:\Windows\System32`.
+4. Analyze the Task Scheduler for unauthorized scheduled tasks.
+
+**Tools:**
+
+- **Wireshark**: Monitor network traffic.
+- **Netcat**: Test open ports.
+- **LogParser**: Analyze event logs.
+
+---
+
+### **12. Unwanted Software**
+
+#### **Issue: Presence of unnecessary applications**
+
+**Steps to Resolve:**
+
+1. Remove via Control Panel or PowerShell.
+
+**PowerShell Script:**
+
+```powershell
+# Uninstall Unwanted Applications
+Get-AppxPackage * | Remove-AppxPackage
+```
+
+**Steps to Identify Unwanted Software:**
+
+1. Review installed programs under `Control Panel > Programs and Features`.
+2. Use tools like **CCleaner** to list and manage applications.
+3. Search for bloatware pre-installed by vendors.
+
+---
+
+### **13. User Auditing**
+
+#### **Issue: Lack of user monitoring**
+
+**Steps to Resolve:**
+
+1. Enable auditing via `AuditPol`.
+
+**PowerShell Script:**
+
+```powershell
+# Enable User Auditing
+AuditPol /set /subcategory:"Account Logon" /success:enable /failure:enable
+```
+
+**Steps to Monitor User Activity:**
+
+1. Use `Get-WinEvent` to review security logs for login attempts.
+2. Enable logging of file access and privilege use under local security policy.
+3. Monitor user permissions regularly.
+
+---
+
+### **Documentation**
+
+- Maintain a log of all applied changes.
+- Use screenshots and exported settings for reporting.
+
+---
+
+This plan provides a comprehensive approach to addressing vulnerabilities in Windows Server 2019, ensuring compliance with CyberPatriot competition guidelines.
+
